@@ -1,14 +1,22 @@
 package ar.edu.uncuyo.carrito.service;
 
-import ar.edu.uncuyo.carrito.dto.user.UsuarioCreateDto;
-import ar.edu.uncuyo.carrito.dto.user.UsuarioDetailDto;
-import ar.edu.uncuyo.carrito.dto.user.UsuarioSummaryDto;
-import ar.edu.uncuyo.carrito.dto.user.UsuarioUpdateDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioCreateDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioDetailDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioSummaryDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioUpdateDto;
 import ar.edu.uncuyo.carrito.entity.Usuario;
 import ar.edu.uncuyo.carrito.error.BusinessException;
 import ar.edu.uncuyo.carrito.mapper.UsuarioMapper;
 import ar.edu.uncuyo.carrito.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService extends BaseService<
@@ -21,8 +29,45 @@ public class UsuarioService extends BaseService<
         UsuarioUpdateDto,
         UsuarioMapper> {
 
-    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder) {
         super("Usuario", repository, mapper);
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Transactional
+    public Usuario buscarUsuarioActual() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof Jwt jwt)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        Long userId;
+        try {
+            userId = Long.parseLong(jwt.getSubject());
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        return find(userId);
+    }
+
+    @Transactional
+    public UsuarioDetailDto buscarUsuarioActualDto() {
+        return mapper.toDto(buscarUsuarioActual());
+    }
+
+    @Override
+    protected void preCreate(UsuarioCreateDto dto, Usuario usuario) {
+        String passwordHash = passwordEncoder.encode(dto.getClave());
+        usuario.setClave(passwordHash);
     }
 
     @Override
@@ -44,6 +89,6 @@ public class UsuarioService extends BaseService<
                 : repository.existsByNombreAndIdNotAndEliminadoFalse(nombre, excludeId);
 
         if (exists)
-            throw new BusinessException("El nombre de usuario ya está en uso");
+            throw new BusinessException("El email de usuario ya está en uso");
     }
 }

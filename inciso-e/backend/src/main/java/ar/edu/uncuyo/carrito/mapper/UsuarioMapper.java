@@ -1,9 +1,9 @@
 package ar.edu.uncuyo.carrito.mapper;
 
-import ar.edu.uncuyo.carrito.dto.user.UsuarioCreateDto;
-import ar.edu.uncuyo.carrito.dto.user.UsuarioDetailDto;
-import ar.edu.uncuyo.carrito.dto.user.UsuarioSummaryDto;
-import ar.edu.uncuyo.carrito.dto.user.UsuarioUpdateDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioCreateDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioDetailDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioSummaryDto;
+import ar.edu.uncuyo.carrito.dto.usuario.UsuarioUpdateDto;
 import ar.edu.uncuyo.carrito.entity.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,7 +22,9 @@ public interface UsuarioMapper extends BaseMapper<Usuario, UsuarioDetailDto, Usu
     @Mapping(target = "eliminado", ignore = true)
     void updateEntity(UsuarioUpdateDto dto, @MappingTarget Usuario usuario);
 
+    @Override
     UsuarioDetailDto toDto(Usuario usuario);
 
+    @Override
     UsuarioSummaryDto toSummaryDto(Usuario usuario);
 }

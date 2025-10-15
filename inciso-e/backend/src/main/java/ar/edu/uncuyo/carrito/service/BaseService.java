@@ -1,6 +1,6 @@
 package ar.edu.uncuyo.carrito.service;
 
-import ar.edu.uncuyo.carrito.dto.BaseDto;
+import ar.edu.uncuyo.carrito.dto.IdentifiableDto;
 import ar.edu.uncuyo.carrito.entity.BaseEntity;
 import ar.edu.uncuyo.carrito.error.BusinessException;
 import ar.edu.uncuyo.carrito.mapper.BaseMapper;
@@ -18,7 +18,7 @@ public abstract class BaseService<
         DetailDto,
         SummaryDto,
         CreateDto,
-        UpdateDto extends BaseDto<ID>,
+        UpdateDto extends IdentifiableDto<ID>,
         M extends BaseMapper<E, DetailDto, SummaryDto, CreateDto, UpdateDto>> {
 
     private final String entityName;

@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseDto<ID> {
+public abstract class IdentifiableDto<ID> {
     protected ID id;
 }

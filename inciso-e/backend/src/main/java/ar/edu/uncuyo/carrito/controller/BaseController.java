@@ -1,6 +1,6 @@
 package ar.edu.uncuyo.carrito.controller;
 
-import ar.edu.uncuyo.carrito.dto.BaseDto;
+import ar.edu.uncuyo.carrito.dto.IdentifiableDto;
 import ar.edu.uncuyo.carrito.service.BaseService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -14,10 +14,10 @@ import java.net.URI;
 
 public abstract class BaseController<
         ID extends Serializable,
-        DetailDto extends BaseDto<ID>,
+        DetailDto extends IdentifiableDto<ID>,
         SummaryDto,
         CreateDto,
-        UpdateDto extends BaseDto<ID>,
+        UpdateDto extends IdentifiableDto<ID>,
         S extends BaseService<?, ID, ?, DetailDto, SummaryDto, CreateDto, UpdateDto, ?>> {
 
     protected final S service;
