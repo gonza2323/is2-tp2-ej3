@@ -37,22 +37,6 @@ export const menu: MenuItem[] = [
         href: paths.dashboard.home,
         icon: PiStarDuotone,
       },
-      {
-        name: 'Documentation',
-        href: paths.docs.root,
-        icon: PiFilesDuotone,
-      },
-    ],
-  },
-
-  {
-    header: 'Apps',
-    section: [
-      {
-        name: 'Kanban',
-        href: paths.dashboard.apps.kanban,
-        icon: PiKanbanDuotone,
-      },
     ],
   },
 
@@ -95,6 +79,17 @@ export const menu: MenuItem[] = [
     ],
   },
 
+    {
+    header: 'Apps',
+    section: [
+      {
+        name: 'Kanban',
+        href: paths.dashboard.apps.kanban,
+        icon: PiKanbanDuotone,
+      },
+    ],
+  },
+
   {
     header: 'Widgets',
     section: [
@@ -112,6 +107,17 @@ export const menu: MenuItem[] = [
         name: 'Tables',
         href: paths.dashboard.widgets.tables,
         icon: PiTableDuotone,
+      },
+    ],
+  },
+
+  {
+    header: 'Documentation',
+    section: [
+      {
+        name: 'Documentation',
+        href: paths.docs.root,
+        icon: PiFilesDuotone,
       },
     ],
   },

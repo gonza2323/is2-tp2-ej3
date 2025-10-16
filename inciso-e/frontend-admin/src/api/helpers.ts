@@ -327,31 +327,19 @@ interface CreateDeleteMutationHookArgs<
  * });
  */
 export function createDeleteMutationHook<
-  ModelSchema extends z.ZodType,
   RouteParams extends Record<string, string | number | undefined> = {},
   QueryParams extends Record<string, string | number | undefined> = {},
 >({
   endpoint,
   rMutationParams,
-}: CreateDeleteMutationHookArgs<z.infer<ModelSchema>, Error, z.infer<ModelSchema>>) {
+}: CreateDeleteMutationHookArgs<void, Error, { route?: RouteParams; query?: QueryParams }>) {
   return (params?: { query?: QueryParams; route?: RouteParams }) => {
     const queryClient = useQueryClient();
     const baseUrl = createUrl(endpoint, params?.query, params?.route);
 
-    const mutationFn = async ({
-      model,
-      route,
-      query,
-    }: {
-      model: z.infer<ModelSchema>;
-      query?: QueryParams;
-      route?: RouteParams;
-    }) => {
+    const mutationFn = async ({ route, query }: { route?: RouteParams; query?: QueryParams }) => {
       const url = createUrl(baseUrl, query, route);
-      return client
-        .delete(url)
-        .then(() => model)
-        .catch(handleRequestError);
+      await client.delete(url); // Expect 204 No Content
     };
 
     return useMutation({

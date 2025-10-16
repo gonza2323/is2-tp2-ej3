@@ -18,7 +18,32 @@ type NotificationsProps = Omit<ActionIconProps, 'children' | 'c' | 'onClick' | '
 
 export function Notifications(props: NotificationsProps) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { data: notifications } = useGetNotifications();
+  // const { data: notifications } = useGetNotifications();
+
+  const notifications = [
+    {
+      id: 1,
+      type: 'network:request',
+      title: 'John Doe sent you a friend request',
+      receivedAt: new Date("2025-10-15"),
+      sentBy: {
+        id: '12313212',
+        avatarUrl: 'https://i.pravatar.cc/150?u=john@example.com',
+        displayName: 'John Doe',
+      },
+    },
+    {
+      id: 2,
+      type: 'project:mention',
+      title: 'Marta Pauleta mentioned you in Mantine',
+      receivedAt: new Date("2025-10-14"),
+      sentBy: {
+        id: '12313212',
+        avatarUrl: 'https://i.pravatar.cc/150?u=marta@example.com',
+        displayName: 'Marta Pauleta',
+      },
+    },
+  ]
 
   const hasNewNotifications = true;
 

@@ -1,27 +1,26 @@
-import { Proveedor, ProveedoresMetrics } from '@/api/entities';
-import { createDeleteMutationHook, createGetQueryHook, createPaginationQueryHook, SortableQueryParams } from '@/api/helpers';
+import { ProveedorDetailDto, ProveedorSummaryDto, ProveedorCreateDto } from '@/api/dtos';
+import { createDeleteMutationHook, createGetQueryHook, createPaginationQueryHook, createPostMutationHook, SortableQueryParams } from '@/api/helpers';
 import { notifications } from '@mantine/notifications';
 
 const QUERY_KEY = 'proveedores';
 const BASE_ENDPOINT = 'proveedores';
 
 export const useGetProveedores = createPaginationQueryHook<
-  typeof Proveedor,
+  typeof ProveedorSummaryDto,
   SortableQueryParams
 >({
   endpoint: BASE_ENDPOINT,
-  dataSchema: Proveedor,
+  dataSchema: ProveedorSummaryDto,
   rQueryParams: { queryKey: [QUERY_KEY] },
 });
 
-export const useGetProveedoresMetrics = createGetQueryHook({
-  endpoint: `${BASE_ENDPOINT}/metrics`,
-  responseSchema: ProveedoresMetrics,
-  rQueryParams: { queryKey: [QUERY_KEY, { resource: 'metrics' }] },
+export const useCreateProveedor = createPostMutationHook({
+  endpoint: "proveedores",
+  bodySchema: ProveedorCreateDto,
+  responseSchema: ProveedorDetailDto,
 });
 
 export const useDeleteProveedor = createDeleteMutationHook<
-  typeof Proveedor,
   { id: number }
 >({
   endpoint: `${BASE_ENDPOINT}/:id`,
@@ -43,27 +42,3 @@ export const useDeleteProveedor = createDeleteMutationHook<
     },
   },
 });
-
-// export const useDeleteProveedor = createDeleteMutationHook<
-//   typeof Proveedor,
-//   { id: string }
-// >({
-//   endpoint: '/proveedores/:id',
-//   rMutationParams: {
-//     onSuccess: (_, variables, __, queryClient) => {
-//       queryClient.invalidateQueries('getProveedores'); // refresh list
-//       notifications.show({
-//         title: 'Deleted',
-//         message: 'Proveedor deleted successfully',
-//         color: 'green',
-//       });
-//     },
-//     onError: (error) => {
-//       notifications.show({
-//         title: 'Error',
-//         message: error.message || 'Failed to delete proveedor',
-//         color: 'red',
-//       });
-//     },
-//   },
-// });

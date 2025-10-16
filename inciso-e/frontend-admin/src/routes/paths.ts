@@ -21,7 +21,8 @@ export const paths = {
       proveedores: {
         root: '/dashboard/management/proveedores',
         list: '/dashboard/management/proveedores/list',
-        view: (proveedorId: string) => `/dashboard/management/proveedores/${autorId}`,
+        view: (proveedorId: string) => `/dashboard/management/proveedores/${proveedorId}`,
+        add: '/dashboard/management/proveedores/add',
       },
       autores: {
         root: '/dashboard/management/autores',

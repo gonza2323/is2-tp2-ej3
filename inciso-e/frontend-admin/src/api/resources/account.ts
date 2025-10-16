@@ -1,7 +1,7 @@
 import { client } from '../axios';
-import { User } from '../entities';
+import { UsuarioDetailDto } from '../dtos';
 
 export async function getAccountInfo() {
   const response = await client.get('auth/me');
-  return User.parse(response.data);
+  return UsuarioDetailDto.parse(response.data);
 }

@@ -1,8 +1,8 @@
-import { User } from '@/api/entities';
+import { UsuarioDetailDto } from '@/api/dtos';
 import { createGetQueryHook } from '@/api/helpers';
 
 export const useGetAccountInfo = createGetQueryHook({
   endpoint: '/account',
-  responseSchema: User,
+  responseSchema: UsuarioDetailDto,
   rQueryParams: { queryKey: ['account'] },
 });

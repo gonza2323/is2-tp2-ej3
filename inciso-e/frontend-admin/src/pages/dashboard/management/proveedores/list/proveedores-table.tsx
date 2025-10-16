@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { DataTableColumn } from 'mantine-datatable';
 import { Avatar, Box, Group, Loader, Rating, Text } from '@mantine/core';
-import { Proveedor } from '@/api/entities';
+import { ProveedorSummaryDto } from '@/api/dtos';
 import { usePagination } from '@/api/helpers';
 import { AddButton } from '@/components/add-button';
 import { DataTable } from '@/components/data-table';
@@ -11,11 +11,11 @@ import { paths } from '@/routes';
 import { formatDate } from '@/utilities/date';
 import { formatPhoneNumber } from '@/utilities/phone-number';
 import { firstLetters } from '@/utilities/text';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 
-type SortableFields = Pick<Proveedor, 'nombre'>;
+type SortableFields = Pick<ProveedorSummaryDto, 'nombre'>;
 
 export function ProveedoresTable() {
   const { page, size, setSize: setSize, setPage } = usePagination();
@@ -40,7 +40,7 @@ export function ProveedoresTable() {
     route: {}
   });
 
-  const columns: DataTableColumn<Proveedor>[] = useMemo(
+  const columns: DataTableColumn<ProveedorSummaryDto>[] = useMemo(
     () => [
       {
         accessor: 'nombre',
@@ -67,7 +67,7 @@ export function ProveedoresTable() {
     []
   );
 
-  const handleDelete = (proveedor: Proveedor) => {
+  const handleDelete = (proveedor: ProveedorSummaryDto) => {
     modals.openConfirmModal({
       title: 'Confirmar borrado',
       children: <Text>¿Está seguro de que desea borrar el proveedor?</Text>,
@@ -88,7 +88,7 @@ export function ProveedoresTable() {
         title="Proveedores"
         description="Lista de proveedores"
         actions={
-          <AddButton variant="default" size="xs">
+          <AddButton variant="default" size="xs" component={NavLink} to={paths.dashboard.management.proveedores.add}>
             Agregar proveedor
           </AddButton>
         }

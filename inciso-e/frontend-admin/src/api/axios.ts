@@ -28,6 +28,6 @@ export function loadAccessToken() {
   if (token) {
     setClientAccessToken(token);
   } else {
-    removeClientAccessToken(); // ensures no empty header
+    removeClientAccessToken();
   }
 }
