@@ -30,32 +30,19 @@ public class UsuarioService extends BaseService<
         UsuarioMapper> {
 
     private final PasswordEncoder passwordEncoder;
+    private final CarritoService carritoService;
+    private final AuthService authService;
 
-    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder, CarritoService carritoService, AuthService authService) {
         super("Usuario", repository, mapper);
         this.passwordEncoder = passwordEncoder;
+        this.carritoService = carritoService;
+        this.authService = authService;
     }
 
     @Transactional
     public Usuario buscarUsuarioActual() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-
-        Object principal = authentication.getPrincipal();
-        if (!(principal instanceof Jwt jwt)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-
-        Long userId;
-        try {
-            userId = Long.parseLong(jwt.getSubject());
-        } catch (NumberFormatException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-
+        Long userId = authService.buscarIdUsuarioActual();
         return find(userId);
     }
 
@@ -68,6 +55,11 @@ public class UsuarioService extends BaseService<
     protected void preCreate(UsuarioCreateDto dto, Usuario usuario) {
         String passwordHash = passwordEncoder.encode(dto.getClave());
         usuario.setClave(passwordHash);
+    }
+
+    @Override
+    protected void postCreate(UsuarioCreateDto dto, Usuario usuario) {
+        carritoService.create(usuario);
     }
 
     @Override
