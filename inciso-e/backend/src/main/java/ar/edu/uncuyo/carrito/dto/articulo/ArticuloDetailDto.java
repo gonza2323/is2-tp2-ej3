@@ -1,4 +1,4 @@
-package ar.edu.uncuyo.carrito.dto.imagen;
+package ar.edu.uncuyo.carrito.dto.articulo;
 
 import ar.edu.uncuyo.carrito.dto.IdentifiableDto;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImagenDetailDto extends IdentifiableDto<Long> {
+public class ArticuloDetailDto extends IdentifiableDto<Long> {
     private String nombre;
-    private String mime;
-    private byte[] contenido;
+    private Double precio;
+    private Long proveedorId;
+    private String proveedorNombre;
+    private Long imagenId;
 }

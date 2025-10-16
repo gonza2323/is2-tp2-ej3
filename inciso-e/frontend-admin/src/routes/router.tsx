@@ -120,6 +120,28 @@ const router = createBrowserRouter([
             ],
           },
           {
+            path: paths.dashboard.management.articulos.root,
+            children: [
+              {
+                index: true,
+                path: paths.dashboard.management.articulos.root,
+                element: <Navigate to={paths.dashboard.management.articulos.list} replace />,
+              },
+              {
+                path: paths.dashboard.management.articulos.list,
+                element: LazyPage(() => import('@/pages/dashboard/management/articulos/list')),
+              },
+              {
+                path: paths.dashboard.management.articulos.add,
+                element: LazyPage(() => import('@/pages/dashboard/management/articulos/add')),
+              },
+              {
+                path: paths.dashboard.management.articulos.root + '/:articuloId',
+                element: LazyPage(() => import('@/pages/dashboard/management/articulos/detail')),
+              },
+            ],
+          },
+          {
             path: paths.dashboard.management.autores.root,
             children: [
               {

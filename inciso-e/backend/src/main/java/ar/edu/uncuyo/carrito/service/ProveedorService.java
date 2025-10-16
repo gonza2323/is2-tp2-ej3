@@ -10,6 +10,8 @@ import ar.edu.uncuyo.carrito.mapper.ProveedorMapper;
 import ar.edu.uncuyo.carrito.repository.ProveedorRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProveedorService extends BaseService<
         Proveedor,
@@ -23,6 +25,11 @@ public class ProveedorService extends BaseService<
 
     public ProveedorService(ProveedorRepository repository, ProveedorMapper mapper) {
         super("Proveedor", repository, mapper);
+    }
+
+    public List<ProveedorSummaryDto> findAllDtos() {
+        List<Proveedor> proveedores = repository.findAllByEliminadoFalseOrderByNombre();
+        return mapper.toSummaryDto(proveedores);
     }
 
     @Override

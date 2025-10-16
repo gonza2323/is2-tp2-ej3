@@ -27,11 +27,11 @@ export function CurrentUser(props: CurrentUserProps) {
       <Menu.Target>
         <Avatar
           src={user?.avatarUrl}
-          alt={user?.displayName ?? 'Current user'}
+          alt={user?.nombre ?? 'Current user'}
           {...props}
           style={{ cursor: 'pointer', ...props.style }}
         >
-          CU
+          {user?.nombre.at(0)?.toUpperCase()}
         </Avatar>
       </Menu.Target>
       <Menu.Dropdown>

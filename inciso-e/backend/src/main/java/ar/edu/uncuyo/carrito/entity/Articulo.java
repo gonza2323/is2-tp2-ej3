@@ -2,13 +2,12 @@ package ar.edu.uncuyo.carrito.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +22,11 @@ public class Articulo extends BaseEntity<Long> {
     @Column(nullable = false)
     private Double precio;
 
-    @OneToMany
-    private List<Imagen> imagenes;
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private Imagen imagen;
+
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private Proveedor proveedor;
 }

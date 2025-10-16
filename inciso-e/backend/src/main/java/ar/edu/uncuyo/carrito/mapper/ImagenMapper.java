@@ -7,6 +7,8 @@ import ar.edu.uncuyo.carrito.entity.Imagen;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.springframework.web.multipart.MultipartFile;
 
 @Mapper(componentModel = "spring")
 public interface ImagenMapper extends BaseMapper<Imagen, ImagenDetailDto, ImagenSummaryDto, ImagenCreateDto, ImagenDetailDto> {
@@ -19,11 +21,31 @@ public interface ImagenMapper extends BaseMapper<Imagen, ImagenDetailDto, Imagen
     @Override
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "eliminado", ignore = true)
-    void updateEntity(ImagenDetailDto dto, @MappingTarget Imagen usuario);
+    void updateEntity(ImagenDetailDto dto, @MappingTarget Imagen imagen);
 
     @Override
-    ImagenDetailDto toDto(Imagen usuario);
+    ImagenDetailDto toDto(Imagen imagen);
 
     @Override
-    ImagenSummaryDto toSummaryDto(Imagen usuario);
+    ImagenSummaryDto toSummaryDto(Imagen imagen);
+
+    @Mapping(target = "nombre", source = "imagen", qualifiedByName = "getFileName")
+    @Mapping(target = "mime", source = "imagen", qualifiedByName = "getContentType")
+    @Mapping(target = "contenido", source = "imagen", qualifiedByName = "getFileContents")
+    ImagenCreateDto toDto(MultipartFile imagen);
+
+    @Named("getFileName")
+    default String getFileName(MultipartFile file) {
+        return file != null ? file.getOriginalFilename() : null;
+    }
+
+    @Named("getContentType")
+    default String getContentType(MultipartFile file) {
+        return file != null ? file.getContentType() : null;
+    }
+
+    @Named("getFileContents")
+    default byte[] getFileContents(MultipartFile file) throws Exception {
+        return file != null ? file.getBytes() : null;
+    }
 }

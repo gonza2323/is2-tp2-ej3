@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ProveedorMapper extends BaseMapper<Proveedor, ProveedorDetailDto, ProveedorSummaryDto, ProveedorCreateDto, ProveedorUpdateDto> {
 
@@ -27,4 +29,6 @@ public interface ProveedorMapper extends BaseMapper<Proveedor, ProveedorDetailDt
 
     @Override
     ProveedorSummaryDto toSummaryDto(Proveedor proveedor);
+
+    List<ProveedorSummaryDto> toSummaryDto(List<Proveedor> proveedores);
 }

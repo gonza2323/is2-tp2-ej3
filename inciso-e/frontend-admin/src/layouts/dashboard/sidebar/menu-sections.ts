@@ -6,9 +6,11 @@ import {
   PiKanbanDuotone,
   PiLockKeyDuotone,
   PiShieldCheckDuotone,
+  PiShoppingCart,
   PiSquaresFourDuotone,
   PiStarDuotone,
   PiTableDuotone,
+  PiTruck,
   PiUserPlusDuotone,
   PiUsersDuotone,
 } from 'react-icons/pi';
@@ -45,12 +47,23 @@ export const menu: MenuItem[] = [
     section: [
       {
         name: 'Proveedores',
-        icon: PiUsersDuotone,
+        icon: PiTruck,
         href: paths.dashboard.management.proveedores.root,
         dropdownItems: [
           {
             name: 'List',
             href: paths.dashboard.management.proveedores.list,
+          },
+        ],
+      },
+      {
+        name: 'Artículos',
+        icon: PiShoppingCart,
+        href: paths.dashboard.management.articulos.root,
+        dropdownItems: [
+          {
+            name: 'List',
+            href: paths.dashboard.management.articulos.list,
           },
         ],
       },
@@ -79,7 +92,7 @@ export const menu: MenuItem[] = [
     ],
   },
 
-    {
+  {
     header: 'Apps',
     section: [
       {

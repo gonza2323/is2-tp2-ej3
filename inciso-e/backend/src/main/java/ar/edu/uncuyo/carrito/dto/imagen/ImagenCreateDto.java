@@ -10,5 +10,5 @@ import lombok.*;
 public class ImagenCreateDto {
     private String nombre;
     private String mime;
-    private Byte[] contenido;
+    private byte[] contenido;
 }
