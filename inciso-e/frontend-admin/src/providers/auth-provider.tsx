@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
-import { loadAccessToken } from '@/api/axios';
+import { loadAccessToken, removeClientAccessToken } from '@/api/axios';
 import { getAccountInfo } from '@/api/resources';
 
 interface AuthContextValues {
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     getAccountInfo()
       .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
+      .catch(() => {setIsAuthenticated(false); removeClientAccessToken()})
       .finally(() => setIsInitialized(true));
   }, []);
 

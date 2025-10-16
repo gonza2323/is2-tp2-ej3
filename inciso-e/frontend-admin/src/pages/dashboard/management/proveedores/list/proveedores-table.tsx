@@ -6,12 +6,14 @@ import { usePagination } from '@/api/helpers';
 import { AddButton } from '@/components/add-button';
 import { DataTable } from '@/components/data-table';
 import { LinkChip } from '@/components/link-chip';
-import { useGetProveedores } from '@/hooks';
+import { useGetProveedores, useDeleteProveedor } from '@/hooks';
 import { paths } from '@/routes';
 import { formatDate } from '@/utilities/date';
 import { formatPhoneNumber } from '@/utilities/phone-number';
 import { firstLetters } from '@/utilities/text';
 import { useNavigate } from 'react-router-dom';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 
 type SortableFields = Pick<Proveedor, 'nombre'>;
 
@@ -34,6 +36,10 @@ export function ProveedoresTable() {
     },
   });
 
+  const deleteMutation = useDeleteProveedor({ 
+    route: {}
+  });
+
   const columns: DataTableColumn<Proveedor>[] = useMemo(
     () => [
       {
@@ -50,12 +56,31 @@ export function ProveedoresTable() {
         textAlign: 'right',
         width: 100,
         render: (proveedor) => (
-          <DataTable.Actions onView={() => console.log(proveedor.id)} onEdit={() => console.log(proveedor.id)} onDelete={() => console.log(proveedor.id)} />
+          <DataTable.Actions
+            onView={() => console.log(proveedor.id)}
+            onEdit={() => console.log(proveedor.id)}
+            onDelete={() => handleDelete(proveedor)}
+          />
         ),
       },
     ],
     []
   );
+
+  const handleDelete = (proveedor: Proveedor) => {
+    modals.openConfirmModal({
+      title: 'Confirmar borrado',
+      children: <Text>¿Está seguro de que desea borrar el proveedor?</Text>,
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
+      onConfirm: () => {
+        deleteMutation.mutate({
+          model: proveedor,
+          route: { id: proveedor.id },
+        });
+      },
+    });
+  };
 
   return (
     <DataTable.Container>
@@ -68,7 +93,7 @@ export function ProveedoresTable() {
           </AddButton>
         }
       />
-      
+
       {/* <DataTable.Tabs tabs={tabs.tabs} onChange={tabs.change} /> */}
       {/* <DataTable.Filters filters={filters.filters} onClear={filters.clear} /> */}
       <DataTable.Content>
