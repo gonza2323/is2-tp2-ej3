@@ -18,6 +18,7 @@ import { notifications } from '@mantine/notifications';
 type SortableFields = Pick<ProveedorSummaryDto, 'nombre'>;
 
 export function ProveedoresTable() {
+  const navigate = useNavigate();
   const { page, size, setSize: setSize, setPage } = usePagination();
   // const { tabs, filters, sort } = DataTable.useDataTable<SortableFields>({
   const { sort } = DataTable.useDataTable<SortableFields>({
@@ -57,8 +58,8 @@ export function ProveedoresTable() {
         width: 100,
         render: (proveedor) => (
           <DataTable.Actions
-            onView={() => console.log(proveedor.id)}
-            onEdit={() => console.log(proveedor.id)}
+            onView={() => { navigate(paths.dashboard.management.proveedores.view(proveedor.id)) }}
+            onEdit={() => { navigate(paths.dashboard.management.proveedores.edit(proveedor.id)) }}
             onDelete={() => handleDelete(proveedor)}
           />
         ),

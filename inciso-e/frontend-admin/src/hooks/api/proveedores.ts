@@ -5,6 +5,12 @@ import { notifications } from '@mantine/notifications';
 const QUERY_KEY = 'proveedores';
 const BASE_ENDPOINT = 'proveedores';
 
+export const useGetProveedor = createGetQueryHook({
+  endpoint: `${BASE_ENDPOINT}/:id`,
+  responseSchema: ProveedorDetailDto,
+  rQueryParams: { queryKey: [QUERY_KEY] },
+});
+
 export const useGetProveedores = createPaginationQueryHook<
   typeof ProveedorSummaryDto,
   SortableQueryParams
@@ -15,7 +21,7 @@ export const useGetProveedores = createPaginationQueryHook<
 });
 
 export const useCreateProveedor = createPostMutationHook({
-  endpoint: "proveedores",
+  endpoint: BASE_ENDPOINT,
   bodySchema: ProveedorCreateDto,
   responseSchema: ProveedorDetailDto,
 });

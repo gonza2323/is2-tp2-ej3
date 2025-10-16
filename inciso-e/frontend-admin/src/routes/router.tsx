@@ -113,6 +113,10 @@ const router = createBrowserRouter([
                 path: paths.dashboard.management.proveedores.add,
                 element: LazyPage(() => import('@/pages/dashboard/management/proveedores/add')),
               },
+              {
+                path: paths.dashboard.management.proveedores.root + '/:proveedorId',
+                element: LazyPage(() => import('@/pages/dashboard/management/proveedores/detail')),
+              },
             ],
           },
           {

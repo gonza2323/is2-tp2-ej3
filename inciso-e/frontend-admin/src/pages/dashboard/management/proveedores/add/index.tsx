@@ -10,7 +10,7 @@ const breadcrumbs = [
   { label: 'Nuevo Proveedor' },
 ];
 
-export default function ListProveedoresPage() {
+export default function ProveedorCreatePage() {
   return (
     <Page title="Nuevo proveedor">
       <PageHeader title="Nuevo proveedor" breadcrumbs={breadcrumbs} />
