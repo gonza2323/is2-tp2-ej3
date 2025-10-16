@@ -98,6 +98,20 @@ const router = createBrowserRouter([
             element: <Navigate to={paths.dashboard.management.customers.root} replace />,
           },
           {
+            path: paths.dashboard.management.proveedores.root,
+            children: [
+              {
+                index: true,
+                path: paths.dashboard.management.proveedores.root,
+                element: <Navigate to={paths.dashboard.management.proveedores.list} replace />,
+              },
+              {
+                path: paths.dashboard.management.proveedores.list,
+                element: LazyPage(() => import('@/pages/dashboard/management/proveedores/list')),
+              },
+            ],
+          },
+          {
             path: paths.dashboard.management.autores.root,
             children: [
               {

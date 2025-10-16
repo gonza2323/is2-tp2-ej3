@@ -60,6 +60,17 @@ export const menu: MenuItem[] = [
     header: 'Management',
     section: [
       {
+        name: 'Proveedores',
+        icon: PiUsersDuotone,
+        href: paths.dashboard.management.proveedores.root,
+        dropdownItems: [
+          {
+            name: 'List',
+            href: paths.dashboard.management.proveedores.list,
+          },
+        ],
+      },
+      {
         name: 'Autores',
         icon: PiUsersDuotone,
         href: paths.dashboard.management.autores.root,

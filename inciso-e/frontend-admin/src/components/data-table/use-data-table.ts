@@ -85,7 +85,7 @@ export function useDataTable<SortableFields>({
       column: sortStatus.columnAccessor as keyof SortableFields,
       direction: sortStatus.direction,
       status: sortStatus,
-      query: `${sortStatus.columnAccessor.toString()}:${sortStatus.direction}` as const,
+      query: `${sortStatus.columnAccessor.toString()},${sortStatus.direction}` as const,
     },
   } as const;
 }

@@ -371,65 +371,56 @@ export function createDeleteMutationHook<
 
 export type PaginationParams = {
   page?: number;
-  limit?: number;
+  size?: number;
 };
 
 export function usePagination(params?: PaginationParams) {
-  const [page, setPage] = useState(params?.page ?? 1);
-  const [limit, setLimit] = useState(params?.limit ?? 15);
+  const [page, setPage] = useState(params?.page ?? 0); // Spring pages start at 0
+  const [size, setSize] = useState(params?.size ?? 25);
 
-  const onChangeLimit = (value: number) => {
-    setLimit(value);
-    setPage(1);
+  const onChangeSize = (value: number) => {
+    setSize(value);
+    setPage(0);
   };
 
-  return { page, limit, setPage, setLimit: onChangeLimit };
+  return { page, size, setPage, setSize: onChangeSize };
 }
 
-export const PaginationMetaSchema = z.object({
-  total: z.number().int().min(0),
-  perPage: z.number().int().positive(),
-  currentPage: z.number().int().positive().nullable(),
-  lastPage: z.number().int().positive(),
-  firstPage: z.number().int().positive(),
-  firstPageUrl: z.string(),
-  lastPageUrl: z.string(),
-  nextPageUrl: z.string().nullable(),
-  previousPageUrl: z.string().nullable(),
+// --- Schema for Spring Boot's Pageable response ---
+export const SpringPaginationMetaSchema = z.object({
+  totalElements: z.number().int().min(0),
+  totalPages: z.number().int().min(1),
+  size: z.number().int().positive(),
+  number: z.number().int().min(0), // current page (0-based)
+  sort: z.any().optional(), // optional, since structure can vary
+  pageable: z.any().optional(),
 });
 
-export type PaginationMeta = z.infer<typeof PaginationMetaSchema>;
+export type SpringPaginationMeta = z.infer<typeof SpringPaginationMetaSchema>;
 
+// --- Hook creation arguments ---
 interface CreatePaginationQueryHookArgs<DataSchema extends z.ZodType> {
-  /** The endpoint for the GET request */
   endpoint: string;
-  /** The Zod schema for the data attribute in response */
   dataSchema: DataSchema;
-  /** The query parameters for the react-query hook */
   rQueryParams: Omit<UndefinedInitialDataOptions, 'queryFn' | 'queryKey'> & {
     queryKey: QueryKey;
   };
 }
 
 export type SortableQueryParams = {
-  sort?: `${string}:${'asc' | 'desc'}`;
+  sort?: `${string},${'asc' | 'desc'}`;
 };
 
-/**
- * Create a custom hook for performing paginated GET requests with react-query and Zod validation
- *
- * @example
- * const useGetUsers = createPaginatedQueryHook<typeof userSchema>({
- *  endpoint: '/api/users',
- *  dataSchema: userSchema,
- *  queryParams: { queryKey: 'getUsers' },
- * });
- */
+// --- Main hook factory ---
 export function createPaginationQueryHook<
   DataSchema extends z.ZodType,
   QueryParams extends Record<string, string | number | undefined> = SortableQueryParams,
   RouteParams extends Record<string, string | number | undefined> = {},
->({ endpoint, dataSchema, rQueryParams }: CreatePaginationQueryHookArgs<DataSchema>) {
+>({
+  endpoint,
+  dataSchema,
+  rQueryParams,
+}: CreatePaginationQueryHookArgs<DataSchema>) {
   const queryFn = async (params: {
     query?: QueryParams & PaginationParams;
     route?: RouteParams;
@@ -437,8 +428,13 @@ export function createPaginationQueryHook<
     const url = createUrl(endpoint, params?.query, params?.route);
 
     const schema = z.object({
-      data: dataSchema.array(),
-      meta: PaginationMetaSchema,
+      content: dataSchema.array(),
+      totalElements: z.number().int().min(0),
+      totalPages: z.number().int().min(1),
+      size: z.number().int().positive(),
+      number: z.number().int().min(0),
+      sort: z.any().optional(),
+      pageable: z.any().optional(),
     });
 
     return client
@@ -447,14 +443,23 @@ export function createPaginationQueryHook<
       .catch(handleRequestError);
   };
 
-  return (params?: { query: QueryParams & PaginationParams; route?: RouteParams }) => {
-    const query = { page: 1, limit: 25, ...params?.query } as unknown as QueryParams;
+  return (params?: { query?: QueryParams & PaginationParams; route?: RouteParams }) => {
+    const query = { page: 0, size: 25, ...params?.query } as unknown as QueryParams;
     const route = params?.route ?? ({} as RouteParams);
 
     return useQuery({
       ...rQueryParams,
       queryKey: getQueryKey(rQueryParams.queryKey, route, query),
       queryFn: () => queryFn({ query, route }),
-    }) as UseQueryResult<{ meta: PaginationMeta; data: z.infer<DataSchema>[] }>;
+      select: (data) => ({
+        data: data.content,
+        meta: {
+          totalElements: data.totalElements,
+          totalPages: data.totalPages,
+          size: data.size,
+          number: data.number,
+        } satisfies SpringPaginationMeta,
+      }),
+    }) as UseQueryResult<{ meta: SpringPaginationMeta; data: z.infer<DataSchema>[] }>;
   };
 }

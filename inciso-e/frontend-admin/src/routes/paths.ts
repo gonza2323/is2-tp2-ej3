@@ -18,6 +18,11 @@ export const paths = {
     home: '/dashboard/home',
     management: {
       root: '/dashboard/management',
+      proveedores: {
+        root: '/dashboard/management/proveedores',
+        list: '/dashboard/management/proveedores/list',
+        view: (proveedorId: string) => `/dashboard/management/proveedores/${autorId}`,
+      },
       autores: {
         root: '/dashboard/management/autores',
         list: '/dashboard/management/autores/list',

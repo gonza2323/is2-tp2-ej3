@@ -17,7 +17,7 @@ type SortableFields = Pick<Customer, 'fullName' | 'rating' | 'createdAt'>;
 
 export function CustomersTable() {
   const { data: metrics } = useGetCustomersMetrics();
-  const { page, limit, setLimit, setPage } = usePagination();
+  const { page, size, setSize: setSize, setPage } = usePagination();
   const { tabs, filters, sort } = DataTable.useDataTable<SortableFields>({
     sortConfig: {
       direction: 'asc',
@@ -59,7 +59,7 @@ export function CustomersTable() {
   const { data, isLoading } = useGetCustomers({
     query: {
       page,
-      limit,
+      size,
       status: tabs.value as Customer['status'],
       sort: sort.query,
     },
@@ -166,9 +166,9 @@ export function CustomersTable() {
           records={data?.data ?? []}
           fetching={isLoading}
           onPageChange={setPage}
-          recordsPerPage={limit}
+          recordsPerPage={size}
           totalRecords={data?.meta.total ?? 0}
-          onRecordsPerPageChange={setLimit}
+          onRecordsPerPageChange={setSize}
           recordsPerPageOptions={[5, 15, 30]}
           sortStatus={sort.status}
           onSortStatusChange={sort.change}

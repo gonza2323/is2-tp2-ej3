@@ -3,24 +3,24 @@ import { DefaultBodyType, StrictRequest } from 'msw';
 export function paginate<D, R extends DefaultBodyType>(request: StrictRequest<R>, data: D[]) {
   const url = new URL(request.url);
   const page = Number(url.searchParams.get('page'));
-  const limit = Number(url.searchParams.get('limit'));
-  const lastPage = Math.ceil(data.length / limit);
+  const size = Number(url.searchParams.get('size'));
+  const lastPage = Math.ceil(data.length / size);
 
   const meta = {
     total: data.length,
-    perPage: limit,
+    perPage: size,
     currentPage: page,
     lastPage,
     firstPage: 1,
-    firstPageUrl: `${url.origin}${url.pathname}?page=1&limit=${limit}`,
-    lastPageUrl: `${url.origin}${url.pathname}?page=${lastPage}&limit=${limit}`,
-    nextPageUrl: `${url.origin}${url.pathname}?page=${Math.min(page + 1, lastPage)}&limit=${limit}`,
-    previousPageUrl: `${url.origin}${url.pathname}?page=${Math.max(page - 1, 1)}&limit=${limit}`,
+    firstPageUrl: `${url.origin}${url.pathname}?page=1&size=${size}`,
+    lastPageUrl: `${url.origin}${url.pathname}?page=${lastPage}&size=${size}`,
+    nextPageUrl: `${url.origin}${url.pathname}?page=${Math.min(page + 1, lastPage)}&size=${size}`,
+    previousPageUrl: `${url.origin}${url.pathname}?page=${Math.max(page - 1, 1)}&size=${size}`,
   };
 
   return {
     meta,
-    data: data.slice((page - 1) * limit, page * limit),
+    data: data.slice((page - 1) * size, page * size),
   };
 }
 

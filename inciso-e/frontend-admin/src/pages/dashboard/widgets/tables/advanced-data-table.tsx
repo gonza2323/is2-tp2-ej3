@@ -5,10 +5,10 @@ import { ExportButton } from '@/components/export-button';
 import { useGetCompanies } from '@/hooks';
 
 export function AdvancedDataTable() {
-  const { page, limit, setLimit, setPage } = usePagination({ page: 1, limit: 10 });
-  const { data, isLoading } = useGetCompanies({ query: { page, limit } });
+  const { page, size, setSize: setSize, setPage } = usePagination({ page: 1, size: 10 });
+  const { data, isLoading } = useGetCompanies({ query: { page, size } });
 
-  const totalRecords = data?.meta.total ?? 0;
+  const totalRecords = data?.meta.totalElements ?? 0;
   const records = data?.data ?? [];
 
   const { tabs, filters } = DataTable.useDataTable({
@@ -46,9 +46,9 @@ export function AdvancedDataTable() {
           records={records}
           fetching={isLoading}
           onPageChange={setPage}
-          recordsPerPage={limit}
+          recordsPerPage={size}
           totalRecords={totalRecords}
-          onRecordsPerPageChange={setLimit}
+          onRecordsPerPageChange={setSize}
           recordsPerPageOptions={[5, 10, 30]}
           columns={[
             {

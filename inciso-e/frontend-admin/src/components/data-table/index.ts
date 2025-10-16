@@ -19,10 +19,10 @@ export const DataTable = {
   Actions: DataTableActions,
   Table: MantineDataTable,
   TextInputFilter: DataTableTextInputFilter,
-  recordsPerPageLabel: (resource: string) => `${capitalize(resource)} per page`,
-  noRecordsText: (resource: string) => `No ${resource} found`,
+  recordsPerPageLabel: (resource: string) => `${capitalize(resource)} por página`,
+  noRecordsText: (resource: string) => `No hay ${resource}`,
   paginationText:
     (resource: string) =>
     ({ from, to, totalRecords }: { from: number; to: number; totalRecords: number }) =>
-      `Showing ${from} to ${to} of ${totalRecords} ${resource}`,
+      `Mostrando de ${from} a ${to} de un total de ${totalRecords} ${resource}`,
 };

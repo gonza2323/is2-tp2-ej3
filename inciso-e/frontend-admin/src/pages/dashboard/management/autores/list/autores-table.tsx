@@ -17,7 +17,7 @@ type SortableFields = Pick<Autor, 'fullName' | 'rating' | 'createdAt'>;
 
 export function AutoresTable() {
   // const { data: metrics } = useGetAutoresMetrics();
-  const { page, limit, setLimit, setPage } = usePagination();
+  const { page, size, setSize: setSize, setPage } = usePagination();
   // const { tabs, filters, sort } = DataTable.useDataTable<SortableFields>({
   const { filters, sort } = DataTable.useDataTable<SortableFields>({
     sortConfig: {
@@ -29,7 +29,7 @@ export function AutoresTable() {
   const { data, isLoading } = useGetAutores({
     query: {
       page,
-      limit,
+      size,
       // status: tabs.value as Autor['status'],
       sort: sort.query,
     },
@@ -137,9 +137,9 @@ export function AutoresTable() {
           records={data?.data ?? []}
           fetching={isLoading}
           onPageChange={setPage}
-          recordsPerPage={limit}
+          recordsPerPage={size}
           totalRecords={data?.meta.total ?? 0}
-          onRecordsPerPageChange={setLimit}
+          onRecordsPerPageChange={setSize}
           recordsPerPageOptions={[5, 15, 30]}
           sortStatus={sort.status}
           onSortStatusChange={sort.change}
