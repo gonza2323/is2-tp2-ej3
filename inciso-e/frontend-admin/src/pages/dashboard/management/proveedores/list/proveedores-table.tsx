@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { DataTableColumn } from 'mantine-datatable';
 import { Avatar, Box, Group, Loader, Rating, Text } from '@mantine/core';
 import { ProveedorSummaryDto } from '@/api/dtos';
@@ -37,9 +37,16 @@ export function ProveedoresTable() {
     },
   });
 
-  const deleteMutation = useDeleteProveedor({ 
-    route: {}
-  });
+  useEffect(() => {
+    const totalPages = data?.meta?.totalPages;
+    if (totalPages != null && page != null) {
+      if (page >= totalPages) {
+        setPage(Math.max(page - 1, 0));
+      }
+    }
+  }, [data, page, setPage]);
+
+  const deleteMutation = useDeleteProveedor();
 
   const columns: DataTableColumn<ProveedorSummaryDto>[] = useMemo(
     () => [
