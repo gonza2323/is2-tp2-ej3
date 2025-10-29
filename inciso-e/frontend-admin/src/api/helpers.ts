@@ -418,7 +418,7 @@ export function createPaginationQueryHook<
     const schema = z.object({
       content: dataSchema.array(),
       totalElements: z.number().int().min(0),
-      totalPages: z.number().int().min(1),
+      totalPages: z.number().int().min(0),
       size: z.number().int().positive(),
       number: z.number().int().min(0),
       sort: z.any().optional(),
