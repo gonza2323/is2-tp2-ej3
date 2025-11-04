@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/rootLayout :: rootlayout(activePage='empresas')}">
+
+<head>
+    <title>Detalle Empresa</title>
+</head>
+
+<body id="page-top">
+
+<div layout:fragment="content"
+     class="container-fluid">
+
+    <div th:if="${msgError}" th:text="${msgError}" class="alert alert-danger" role="alert">MENSAJE ERROR</div>
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Detalle Empresa</h1>
+
+    <!-- Formulario -->
+    <ul th:replace="~{empresa/empresaForm :: empresaForm(actionUrl='#', readOnly=true)}"></ul>
+
+</div>
+
+</body>
+
+</html>
